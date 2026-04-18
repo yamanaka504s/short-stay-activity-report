@@ -290,7 +290,7 @@ button,input,textarea,select{font-family:inherit;color:inherit}
 .hero-main .hero-cap{
   position:absolute;bottom:0;left:0;right:0;padding:16px;
   background:linear-gradient(0deg, rgba(0,0,0,.6), transparent);
-  color:#fff;font-family:"Shippori Mincho",serif;font-size:13px;letter-spacing:.05em;line-height:1.5;
+  color:#fff;font-family:"Shippori Mincho",serif;font-size:20px;letter-spacing:.1em;line-height:1.55;
 }
 .hero-side{display:grid;grid-template-rows:1fr 1fr;gap:10px}
 .hero-side-img{position:relative;background:#ddd;overflow:hidden;border-radius:2px}
@@ -301,24 +301,18 @@ button,input,textarea,select{font-family:inherit;color:inherit}
 .hero-side-img .hero-cap{
   position:absolute;bottom:0;left:0;right:0;padding:8px 10px;
   background:linear-gradient(0deg, rgba(0,0,0,.55), transparent);
-  color:#fff;font-family:"Shippori Mincho",serif;font-size:10px;letter-spacing:.05em;line-height:1.4;
+  color:#fff;font-family:"Shippori Mincho",serif;font-size:20px;letter-spacing:.1em;line-height:1.55;
 }
 
 .narrative{
-  display:grid;grid-template-columns:auto 1fr;gap:22px;margin-bottom:22px;
-  flex:1 1 auto;min-height:60mm;
-}
-.narr-label{
-  writing-mode:vertical-rl;font-family:"Shippori Mincho",serif;
-  font-size:11px;color:var(--accent);letter-spacing:.5em;padding:14px 0;
-  border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  align-self:stretch;
+  display:block;margin-bottom:18px;flex:0 0 auto;
 }
 .narr-body{
-  font-family:"Shippori Mincho",serif;font-size:16.5px;line-height:1.95;
-  color:var(--ink);text-align:justify;letter-spacing:.09em;
+  font-family:"Shippori Mincho",serif;font-size:20px;line-height:1.85;
+  color:var(--ink);text-align:justify;letter-spacing:.08em;
   white-space:pre-wrap;font-weight:400;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+  max-height:calc(20px * 1.85 * 4);
 }
 .narr-body::first-letter{
   font-size:34px;color:var(--accent);float:left;line-height:.95;
@@ -361,7 +355,7 @@ button,input,textarea,select{font-family:inherit;color:inherit}
 .gal-item .gal-cap{
   position:absolute;bottom:0;left:0;right:0;padding:8px 12px;
   background:linear-gradient(0deg, rgba(0,0,0,.55), transparent);
-  color:#fff;font-family:"Shippori Mincho",serif;font-size:11px;letter-spacing:.05em;line-height:1.4;
+  color:#fff;font-family:"Shippori Mincho",serif;font-size:20px;letter-spacing:.1em;line-height:1.55;
 }
 
 .rep-footer{
@@ -448,8 +442,8 @@ button,input,textarea,select{font-family:inherit;color:inherit}
       <div class="section">
         <div class="section-label">04 &middot; Narrative</div>
         <div class="field">
-          <label>活動の様子（本文）</label>
-          <textarea id="f-narrative" rows="10" placeholder="ご滞在中のご様子を自然な文章で綴ってください。季節の話題、参加された行事、印象的なエピソードなど。"></textarea>
+          <label>活動の様子（本文・最大4行）</label>
+          <textarea id="f-narrative" rows="5" placeholder="本文は紙面上で最大4行まで表示されます。"></textarea>
         </div>
       </div>
 
@@ -509,8 +503,7 @@ button,input,textarea,select{font-family:inherit;color:inherit}
       </div>
 
       <div class="narrative">
-        <div class="narr-label">滞 在 中 の ご 様 子</div>
-        <div class="narr-body" id="p-narrative">滞在中の活動内容がここに表示されます。左のフォームに入力してください。</div>
+        <div class="narr-body" id="p-narrative">左のフォームに本文を入力してください。</div>
       </div>
 
       <div class="gallery-strip">
@@ -780,7 +773,7 @@ function render(){
   setPhoto("p-gal-5", state.photos[5], state.captions[5], "N° 06", "gal-cap");
 
   const narr = val("f-narrative");
-  document.getElementById("p-narrative").textContent = narr || "滞在中の活動内容がここに表示されます。左のフォームに入力してください。";
+  document.getElementById("p-narrative").textContent = narr || "左のフォームに本文を入力してください。";
 
   save();
 }
