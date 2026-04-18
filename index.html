@@ -199,6 +199,9 @@ button,input,textarea,select{font-family:inherit;color:inherit}
 
 .cover-area{
   position:relative;margin-bottom:22px;flex-shrink:0;
+  height:70mm;padding:20px 22px;border-radius:2px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:12px;
+  overflow:hidden;
 }
 .cover-area .cover-img-layer{
   position:absolute;inset:0;overflow:hidden;z-index:0;
@@ -217,14 +220,12 @@ button,input,textarea,select{font-family:inherit;color:inherit}
 }
 .cover-area.has-bg .cover-overlay{display:block}
 .cover-area.has-bg{
-  min-height:70mm;padding:20px 22px;border-radius:2px;
-  display:flex;flex-direction:column;justify-content:space-between;gap:12px;
   cursor:grab;user-select:none;touch-action:none;
 }
 .cover-area.has-bg.dragging{cursor:grabbing}
 .cover-area .rep-head,.cover-area .stay-banner{position:relative;z-index:2}
-.cover-area.has-bg .rep-head{border-bottom:none;padding-bottom:0;margin-bottom:0}
-.cover-area.has-bg .stay-banner{border-bottom:none;padding:0;margin-bottom:0}
+.cover-area .rep-head{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.cover-area .stay-banner{border-bottom:none;padding:0;margin-bottom:0}
 .cover-area.has-bg .rep-eyebrow{color:#F3E5C8}
 .cover-area.has-bg .rep-title{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
 .cover-area.has-bg .rep-title .rep-mark{color:#F3E5C8}
