@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>活動報告 | 元気の家ショートステイ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3EFE7;
+  --paper:#FBF8F2;
+  --ink:#2B2A26;
+  --ink-soft:#5B584F;
+  --muted:#8A867A;
+  --line:#D9D2C3;
+  --accent:#7C5A3A;
+  --accent-soft:#C9A37A;
+  --sage:#6F7E5E;
+  --rose:#B67461;
+  --gold:#B5924A;
+  --shadow: 0 10px 40px rgba(60,50,30,.08), 0 2px 8px rgba(60,50,30,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Inter",system-ui,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font-family:inherit;color:inherit}
+
+.app{
+  display:grid;
+  grid-template-columns: 420px 1fr;
+  min-height:100vh;
+}
+
+.editor{
+  background:#ffffff;
+  border-right:1px solid var(--line);
+  overflow-y:auto;
+  height:100vh;
+  position:sticky;
+  top:0;
+}
+.editor-head{
+  padding:28px 28px 20px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#fff 0%,#FBF8F2 100%);
+}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand-mark{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:500;
+  font-size:22px;color:var(--accent);letter-spacing:.02em;
+}
+.brand-jp{
+  font-family:"Shippori Mincho",serif;font-weight:500;font-size:13px;
+  color:var(--ink-soft);letter-spacing:.25em;
+}
+.editor-title{
+  margin:14px 0 6px;font-family:"Shippori Mincho",serif;font-weight:600;
+  font-size:22px;color:var(--ink);letter-spacing:.05em;
+}
+.editor-sub{
+  margin:0;font-size:12px;color:var(--muted);letter-spacing:.08em;
+}
+.editor-body{padding:22px 28px 120px}
+
+.section{margin-bottom:26px}
+.section-label{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:600;letter-spacing:.22em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:12px;
+}
+.section-label::before{content:"";display:block;width:18px;height:1px;background:var(--accent)}
+
+.field{margin-bottom:12px}
+.field label{
+  display:block;font-size:11px;font-weight:500;letter-spacing:.12em;
+  color:var(--ink-soft);margin-bottom:6px;
+}
+.field input,.field textarea,.field select{
+  width:100%;padding:10px 12px;border:1px solid var(--line);background:#fff;
+  border-radius:4px;font-size:13px;color:var(--ink);transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+  outline:none;border-color:var(--accent-soft);box-shadow:0 0 0 3px rgba(201,163,122,.15);
+}
+.field textarea{resize:vertical;min-height:70px;line-height:1.7}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.photo-slot{
+  position:relative;aspect-ratio:4/3;background:#FBF8F2;border:1.5px dashed var(--line);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;cursor:pointer;transition:border-color .15s,background .15s;
+}
+.photo-slot:hover{border-color:var(--accent-soft);background:#F3EFE7}
+.photo-slot img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-slot .ph-empty{
+  text-align:center;font-size:11px;color:var(--muted);letter-spacing:.1em;padding:8px;line-height:1.6;
+}
+.photo-slot .ph-empty svg{display:block;margin:0 auto 6px;opacity:.5}
+.photo-slot .ph-tag{
+  position:absolute;top:6px;left:6px;background:rgba(43,42,38,.8);color:#fff;
+  font-size:9px;letter-spacing:.15em;padding:3px 7px;border-radius:3px;
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+}
+.photo-slot .ph-remove{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  background:rgba(43,42,38,.85);color:#fff;border:none;cursor:pointer;
+  display:none;align-items:center;justify-content:center;font-size:14px;line-height:1;
+}
+.photo-slot.has-image .ph-remove{display:flex}
+.photo-slot.has-image .ph-empty{display:none}
+.photo-caption{
+  width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--line);
+  border-radius:3px;font-size:11px;background:#fff;
+}
+.cover-upload{
+  position:relative;aspect-ratio:21/8;background:#FBF8F2;border:1.5px dashed var(--line);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;cursor:pointer;transition:border-color .15s,background .15s;
+}
+.cover-upload:hover{border-color:var(--accent-soft);background:#F3EFE7}
+.cover-upload img{width:100%;height:100%;object-fit:cover;display:block}
+.cover-upload .ph-empty{
+  text-align:center;font-size:11px;color:var(--muted);letter-spacing:.1em;padding:8px;line-height:1.6;
+}
+.cover-upload .ph-tag{
+  position:absolute;top:6px;left:6px;background:rgba(43,42,38,.8);color:#fff;
+  font-size:9px;letter-spacing:.15em;padding:3px 7px;border-radius:3px;
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+}
+.cover-upload .ph-remove{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  background:rgba(43,42,38,.85);color:#fff;border:none;cursor:pointer;
+  display:none;align-items:center;justify-content:center;font-size:14px;line-height:1;z-index:2;
+}
+.cover-upload.has-image .ph-remove{display:flex}
+.cover-upload.has-image .ph-empty{display:none}
+
+.crop-hint{
+  font-size:10.5px;color:var(--ink-soft);letter-spacing:.04em;line-height:1.7;
+  margin-top:10px;padding:9px 11px;background:#FBF8F2;
+  border-left:2px solid var(--accent-soft);border-radius:0 3px 3px 0;
+}
+.crop-hint strong{color:var(--accent);font-weight:600}
+
+.action-bar{
+  position:fixed;bottom:0;left:0;width:420px;padding:14px 22px;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);display:flex;gap:8px;z-index:10;
+}
+.btn{
+  flex:1;padding:11px 14px;border:none;border-radius:4px;cursor:pointer;
+  font-size:12px;font-weight:500;letter-spacing:.15em;transition:all .15s;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#5C4129}
+.btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+.btn-ghost:hover{background:#FBF8F2;color:var(--ink)}
+
+.preview-wrap{
+  padding:40px;overflow-y:auto;height:100vh;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(201,163,122,.06), transparent 50%),
+    radial-gradient(circle at 80% 90%, rgba(111,126,94,.05), transparent 50%),
+    var(--bg);
+}
+.preview-head{
+  display:flex;justify-content:space-between;align-items:center;
+  max-width:820px;margin:0 auto 20px;
+}
+.preview-meta{
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+  color:var(--muted);font-size:14px;letter-spacing:.05em;
+}
+.zoom-control{
+  display:flex;gap:6px;align-items:center;font-size:11px;color:var(--muted);letter-spacing:.15em;
+}
+.zoom-btn{
+  width:28px;height:28px;border:1px solid var(--line);background:#fff;
+  border-radius:4px;cursor:pointer;font-size:14px;color:var(--ink-soft);
+}
+.zoom-btn:hover{background:#FBF8F2}
+
+.paper-scaler{display:flex;justify-content:center}
+.paper{
+  width:210mm;height:297mm;background:var(--paper);
+  box-shadow:var(--shadow);
+  padding:18mm 16mm;
+  position:relative;
+  transform-origin:top center;
+  display:flex;flex-direction:column;
+  background-image:linear-gradient(180deg, rgba(255,253,248,.9) 0%, rgba(251,248,242,1) 100%);
+}
+.paper::before{
+  content:"";position:absolute;top:8mm;right:8mm;bottom:8mm;left:8mm;
+  border:0.5px solid rgba(124,90,58,.15);pointer-events:none;
+}
+
+.cover-area{
+  position:relative;margin-bottom:22px;flex-shrink:0;
+}
+.cover-area .cover-img-layer{
+  position:absolute;inset:0;overflow:hidden;z-index:0;
+  border-radius:2px;display:none;
+}
+.cover-area.has-bg .cover-img-layer{display:block}
+.cover-area .cover-img-layer img{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  object-fit:cover;transform-origin:center center;
+  user-select:none;pointer-events:none;-webkit-user-drag:none;
+}
+.cover-area .cover-overlay{
+  position:absolute;inset:0;z-index:1;pointer-events:none;display:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.08) 40%, rgba(0,0,0,.55) 100%);
+  border-radius:2px;
+}
+.cover-area.has-bg .cover-overlay{display:block}
+.cover-area.has-bg{
+  min-height:70mm;padding:20px 22px;border-radius:2px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:12px;
+  cursor:grab;user-select:none;touch-action:none;
+}
+.cover-area.has-bg.dragging{cursor:grabbing}
+.cover-area .rep-head,.cover-area .stay-banner{position:relative;z-index:2}
+.cover-area.has-bg .rep-head{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.cover-area.has-bg .stay-banner{border-bottom:none;padding:0;margin-bottom:0}
+.cover-area.has-bg .rep-eyebrow{color:#F3E5C8}
+.cover-area.has-bg .rep-title{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+.cover-area.has-bg .rep-title .rep-mark{color:#F3E5C8}
+.cover-area.has-bg .rep-subtitle{color:rgba(255,255,255,.82);text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.cover-area.has-bg .rep-facility{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.cover-area.has-bg .rep-facility-en{color:#F3E5C8}
+.cover-area.has-bg .s-label{color:rgba(255,255,255,.78)}
+.cover-area.has-bg .s-value{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.cover-area.has-bg .s-days{color:rgba(255,255,255,.85)}
+
+.rep-head{
+  display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px;
+  padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:20px;
+}
+.rep-eyebrow{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:500;
+  font-size:13px;color:var(--accent);letter-spacing:.1em;margin-bottom:4px;
+}
+.rep-title{
+  font-family:"Shippori Mincho",serif;font-weight:600;font-size:32px;
+  color:var(--ink);letter-spacing:.12em;margin:0;line-height:1.2;
+}
+.rep-title .rep-mark{color:var(--accent);font-size:20px;margin-left:8px;vertical-align:middle}
+.rep-subtitle{
+  font-size:10px;letter-spacing:.3em;color:var(--muted);margin-top:6px;
+}
+.rep-facility-box{
+  text-align:right;
+}
+.rep-facility{
+  font-family:"Shippori Mincho",serif;font-size:13px;color:var(--ink);font-weight:500;letter-spacing:.12em;
+}
+.rep-facility-en{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:10px;
+  color:var(--accent);letter-spacing:.1em;margin-top:4px;
+}
+
+.stay-banner{
+  display:flex;justify-content:center;align-items:baseline;gap:16px;
+  padding:14px 0 20px;margin-bottom:22px;border-bottom:1px solid var(--line);
+}
+.stay-banner .s-label{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:12px;
+  color:var(--accent);letter-spacing:.2em;
+}
+.stay-banner .s-value{
+  font-family:"Shippori Mincho",serif;font-size:18px;color:var(--ink);
+  letter-spacing:.1em;font-weight:500;
+}
+.stay-banner .s-days{
+  font-family:"Shippori Mincho",serif;font-size:11px;color:var(--muted);letter-spacing:.15em;
+}
+
+.hero{
+  display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-bottom:20px;
+  height:95mm;flex-shrink:0;
+}
+.hero-main{position:relative;background:#ddd;overflow:hidden;border-radius:2px}
+.hero-main img{width:100%;height:100%;object-fit:cover;display:block;
+  transform-origin:center center;user-select:none;-webkit-user-drag:none;pointer-events:none;}
+.hero-main.has-image{cursor:grab;user-select:none;touch-action:none}
+.hero-main.has-image.dragging{cursor:grabbing}
+.hero-main .hero-cap{
+  position:absolute;bottom:0;left:0;right:0;padding:16px;
+  background:linear-gradient(0deg, rgba(0,0,0,.6), transparent);
+  color:#fff;font-family:"Shippori Mincho",serif;font-size:13px;letter-spacing:.05em;line-height:1.5;
+}
+.hero-side{display:grid;grid-template-rows:1fr 1fr;gap:10px}
+.hero-side-img{position:relative;background:#ddd;overflow:hidden;border-radius:2px}
+.hero-side-img img{width:100%;height:100%;object-fit:cover;display:block;
+  transform-origin:center center;user-select:none;-webkit-user-drag:none;pointer-events:none;}
+.hero-side-img.has-image{cursor:grab;user-select:none;touch-action:none}
+.hero-side-img.has-image.dragging{cursor:grabbing}
+.hero-side-img .hero-cap{
+  position:absolute;bottom:0;left:0;right:0;padding:8px 10px;
+  background:linear-gradient(0deg, rgba(0,0,0,.55), transparent);
+  color:#fff;font-family:"Shippori Mincho",serif;font-size:10px;letter-spacing:.05em;line-height:1.4;
+}
+
+.narrative{
+  display:grid;grid-template-columns:auto 1fr;gap:22px;margin-bottom:22px;
+  flex:1 1 auto;min-height:60mm;
+}
+.narr-label{
+  writing-mode:vertical-rl;font-family:"Shippori Mincho",serif;
+  font-size:11px;color:var(--accent);letter-spacing:.5em;padding:14px 0;
+  border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  align-self:stretch;
+}
+.narr-body{
+  font-family:"Shippori Mincho",serif;font-size:16.5px;line-height:1.95;
+  color:var(--ink);text-align:justify;letter-spacing:.09em;
+  white-space:pre-wrap;font-weight:400;
+}
+.narr-body::first-letter{
+  font-size:34px;color:var(--accent);float:left;line-height:.95;
+  margin-right:8px;margin-top:4px;font-weight:500;
+}
+
+.details{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;
+}
+.detail-card{
+  background:#fff;border:1px solid var(--line);padding:12px 13px;border-radius:2px;
+  position:relative;
+}
+.detail-card .d-icon{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:11px;
+  color:var(--accent);letter-spacing:.1em;margin-bottom:4px;
+}
+.detail-card .d-label{
+  font-family:"Shippori Mincho",serif;font-size:12px;color:var(--ink);
+  font-weight:500;letter-spacing:.2em;margin-bottom:6px;
+  padding-bottom:6px;border-bottom:1px solid var(--line);
+}
+.detail-card .d-value{
+  font-size:10.5px;color:var(--ink-soft);line-height:1.75;letter-spacing:.03em;
+}
+
+.gallery-strip{margin-bottom:18px;flex-shrink:0}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;height:55mm}
+.gal-item{
+  position:relative;background:#ddd;overflow:hidden;border-radius:2px;
+}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block;
+  transform-origin:center center;user-select:none;-webkit-user-drag:none;pointer-events:none;}
+.gal-item.has-image{cursor:grab;user-select:none;touch-action:none}
+.gal-item.has-image.dragging{cursor:grabbing}
+.gal-item .gal-num{
+  position:absolute;top:6px;left:10px;font-family:"Cormorant Garamond",serif;
+  font-style:italic;font-size:11px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);letter-spacing:.1em;
+}
+.gal-item .gal-cap{
+  position:absolute;bottom:0;left:0;right:0;padding:8px 12px;
+  background:linear-gradient(0deg, rgba(0,0,0,.55), transparent);
+  color:#fff;font-family:"Shippori Mincho",serif;font-size:11px;letter-spacing:.05em;line-height:1.4;
+}
+
+.rep-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:14px;border-top:1px solid var(--line);margin-top:14px;
+  font-size:9px;color:var(--muted);letter-spacing:.2em;
+}
+.rep-footer .seal{
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:11px;
+  color:var(--accent);letter-spacing:.1em;
+}
+
+.rep-photo-empty{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:repeating-linear-gradient(45deg,#EDE7DA,#EDE7DA 8px,#E5DEC8 8px,#E5DEC8 16px);
+  color:var(--muted);font-size:9px;letter-spacing:.25em;text-align:center;line-height:1.6;
+}
+
+@media print{
+  @page{size:A4;margin:0}
+  html,body{background:#fff}
+  .editor,.preview-head,.action-bar{display:none !important}
+  .app{display:block}
+  .preview-wrap{padding:0;height:auto;overflow:visible;background:#fff}
+  .paper{box-shadow:none;transform:none !important;width:210mm;min-height:297mm;margin:0}
+  .paper::before{border-color:rgba(124,90,58,.2)}
+}
+
+.editor::-webkit-scrollbar,.preview-wrap::-webkit-scrollbar{width:8px}
+.editor::-webkit-scrollbar-track,.preview-wrap::-webkit-scrollbar-track{background:transparent}
+.editor::-webkit-scrollbar-thumb,.preview-wrap::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+
+@media (max-width: 1100px){
+  .app{grid-template-columns:1fr}
+  .editor{position:static;height:auto}
+  .action-bar{position:static;width:100%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="editor">
+    <div class="editor-head">
+      <div class="brand">
+        <span class="brand-mark">Keepsake</span>
+        <span class="brand-jp">活 動 報 告</span>
+      </div>
+      <h1 class="editor-title">元気の家ショートステイ</h1>
+      <p class="editor-sub">A C T I V I T Y &nbsp; R E P O R T</p>
+    </div>
+
+    <div class="editor-body">
+
+      <div class="section">
+        <div class="section-label">01 &middot; Period</div>
+        <div class="grid2">
+          <div class="field"><label>利用開始日</label><input type="date" id="f-stayFrom" /></div>
+          <div class="field"><label>利用終了日</label><input type="date" id="f-stayTo" /></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">02 &middot; Header Photo</div>
+        <div class="cover-upload" id="cover-upload">
+          <div class="ph-tag">HEADER BG</div>
+          <button class="ph-remove" type="button">&times;</button>
+          <div class="ph-empty">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 6px;opacity:.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 8"/></svg>
+            ヘッダー背景写真<br/>クリックで追加
+          </div>
+        </div>
+        <div class="crop-hint">
+          写真を挿入後、<strong>プレビュー上で直接ドラッグ</strong>して位置調整、<strong>マウスホイール</strong>で拡大縮小できます。<strong>ダブルクリック</strong>で初期状態に戻ります。
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">03 &middot; Photographs</div>
+        <div class="photos" id="photos"></div>
+        <input type="file" id="f-fileInput" accept="image/*" style="display:none" />
+      </div>
+
+      <div class="section">
+        <div class="section-label">04 &middot; Narrative</div>
+        <div class="field">
+          <label>活動の様子（本文）</label>
+          <textarea id="f-narrative" rows="10" placeholder="ご滞在中のご様子を自然な文章で綴ってください。季節の話題、参加された行事、印象的なエピソードなど。"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-ghost" id="btn-sample">サンプル読込</button>
+      <button class="btn btn-ghost" id="btn-reset">クリア</button>
+      <button class="btn btn-primary" id="btn-print">印刷 / PDF</button>
+    </div>
+  </aside>
+
+  <main class="preview-wrap">
+    <div class="preview-head">
+      <div class="preview-meta">Activity Report &middot; Preview</div>
+      <div class="zoom-control">
+        <button class="zoom-btn" id="zoom-out">−</button>
+        <span id="zoom-label">100%</span>
+        <button class="zoom-btn" id="zoom-in">+</button>
+      </div>
+    </div>
+
+    <div class="paper-scaler">
+    <section class="paper" id="paper">
+
+      <div class="cover-area" id="p-cover">
+        <div class="cover-img-layer"><img alt="" /></div>
+        <div class="cover-overlay"></div>
+
+        <header class="rep-head">
+          <div>
+            <div class="rep-eyebrow">Short Stay &middot; Activity Journal</div>
+            <h2 class="rep-title">活動報告<span class="rep-mark">◆</span></h2>
+            <div class="rep-subtitle">A R E P O R T &nbsp;O F &nbsp;Y O U R &nbsp;D A Y S &nbsp;W I T H &nbsp;U S</div>
+          </div>
+          <div class="rep-facility-box">
+            <div class="rep-facility">元気の家ショートステイ</div>
+            <div class="rep-facility-en">Genki no Ie &middot; Short Stay</div>
+          </div>
+        </header>
+
+        <div class="stay-banner">
+          <span class="s-label">Stay</span>
+          <span class="s-value" id="p-stay">ご利用期間</span>
+          <span class="s-days" id="p-days"></span>
+        </div>
+      </div>
+
+      <div class="hero">
+        <div class="hero-main" id="p-hero-main">
+          <div class="rep-photo-empty">MAIN<br/>PHOTOGRAPH</div>
+        </div>
+        <div class="hero-side">
+          <div class="hero-side-img" id="p-hero-1"><div class="rep-photo-empty">PHOTO 02</div></div>
+          <div class="hero-side-img" id="p-hero-2"><div class="rep-photo-empty">PHOTO 03</div></div>
+        </div>
+      </div>
+
+      <div class="narrative">
+        <div class="narr-label">滞 在 中 の ご 様 子</div>
+        <div class="narr-body" id="p-narrative">滞在中の活動内容がここに表示されます。左のフォームに入力してください。</div>
+      </div>
+
+      <div class="gallery-strip">
+        <div class="gallery-grid">
+          <div class="gal-item" id="p-gal-3"><div class="rep-photo-empty">PHOTO 04</div></div>
+          <div class="gal-item" id="p-gal-4"><div class="rep-photo-empty">PHOTO 05</div></div>
+          <div class="gal-item" id="p-gal-5"><div class="rep-photo-empty">PHOTO 06</div></div>
+        </div>
+      </div>
+
+      <footer class="rep-footer">
+        <div>THANK YOU FOR ENTRUSTING YOUR LOVED ONE TO OUR CARE</div>
+        <div class="seal">元気の家ショートステイ</div>
+      </footer>
+
+    </section>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const PHOTO_COUNT = 6;
+function newPhoto(){ return {src:null, x:0, y:0, zoom:1}; }
+const state = {
+  cover: newPhoto(),
+  photos: Array.from({length:PHOTO_COUNT}, newPhoto),
+  captions: new Array(PHOTO_COUNT).fill("")
+};
+let currentSlot = 0; // -1 means cover, 0..N-1 means photo index
+const PREVIEW_CONTAINERS = ["p-hero-main","p-hero-1","p-hero-2","p-gal-3","p-gal-4","p-gal-5"];
+
+// Build photo slots dynamically
+(function buildSlots(){
+  const photosEl = document.getElementById("photos");
+  const labels = ["COVER","N° 02","N° 03","N° 04","N° 05","N° 06"];
+  const hints = ["メイン写真<br/>クリックで追加","サブ写真","サブ写真","サブ写真","サブ写真","サブ写真"];
+  const placeholders = ["キャプション（例：お誕生日会にて）","キャプション","キャプション","キャプション","キャプション","キャプション"];
+  const svg = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 17-5-5-8 8"/></svg>';
+  let html = "";
+  for(let i=0;i<PHOTO_COUNT;i++){
+    html += `<div>
+      <div class="photo-slot" data-slot="${i}">
+        <div class="ph-tag">${labels[i]}</div>
+        <button class="ph-remove" type="button">&times;</button>
+        <div class="ph-empty">${svg}${hints[i]}</div>
+      </div>
+      <input type="text" class="photo-caption" data-cap="${i}" placeholder="${placeholders[i]}" />
+    </div>`;
+  }
+  photosEl.innerHTML = html;
+})();
+
+const fields = {
+  stayFrom:"f-stayFrom", stayTo:"f-stayTo",
+  narrative:"f-narrative"
+};
+Object.values(fields).forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener("input", render);
+});
+document.querySelectorAll(".photo-caption").forEach(el=>{
+  el.addEventListener("input", e=>{
+    state.captions[+e.target.dataset.cap] = e.target.value;
+    save(); render();
+  });
+});
+
+document.querySelectorAll(".photo-slot").forEach(slot=>{
+  slot.addEventListener("click", e=>{
+    if(e.target.classList.contains("ph-remove")) return;
+    currentSlot = +slot.dataset.slot;
+    document.getElementById("f-fileInput").click();
+  });
+  slot.querySelector(".ph-remove").addEventListener("click", e=>{
+    e.stopPropagation();
+    const idx = +slot.dataset.slot;
+    state.photos[idx] = null;
+    slot.classList.remove("has-image");
+    const oldImg = slot.querySelector("img");
+    if(oldImg) oldImg.remove();
+    save(); render();
+  });
+});
+document.getElementById("f-fileInput").addEventListener("change", e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const src = ev.target.result;
+    if(currentSlot === -1){
+      // cover
+      state.cover = {src, x:0, y:0, zoom:1};
+      const up = document.getElementById("cover-upload");
+      const oldImg = up.querySelector("img");
+      if(oldImg) oldImg.remove();
+      const img = document.createElement("img");
+      img.src = src;
+      up.appendChild(img);
+      up.classList.add("has-image");
+    } else {
+      state.photos[currentSlot] = {src, x:0, y:0, zoom:1};
+      const slot = document.querySelector(`.photo-slot[data-slot="${currentSlot}"]`);
+      const oldImg = slot.querySelector("img");
+      if(oldImg) oldImg.remove();
+      const img = document.createElement("img");
+      img.src = src;
+      slot.appendChild(img);
+      slot.classList.add("has-image");
+    }
+    save(); render();
+  };
+  reader.readAsDataURL(file);
+  e.target.value = "";
+});
+
+// Cover upload click/remove
+(function initCover(){
+  const up = document.getElementById("cover-upload");
+  up.addEventListener("click", e=>{
+    if(e.target.classList.contains("ph-remove")) return;
+    currentSlot = -1;
+    document.getElementById("f-fileInput").click();
+  });
+  up.querySelector(".ph-remove").addEventListener("click", e=>{
+    e.stopPropagation();
+    state.cover = newPhoto();
+    up.classList.remove("has-image");
+    const oldImg = up.querySelector("img");
+    if(oldImg) oldImg.remove();
+    save(); render();
+  });
+})();
+
+function val(id){ return document.getElementById(id)?.value || ""; }
+function fmtDate(d){
+  if(!d) return "";
+  const [y,m,day] = d.split("-");
+  return `${y}.${m}.${day}`;
+}
+function calcDays(from,to){
+  if(!from||!to) return "";
+  const f = new Date(from), t = new Date(to);
+  const diff = Math.round((t-f)/(1000*60*60*24)) + 1;
+  return diff > 0 ? `${diff}日間` : "";
+}
+
+function applyCrop(img, p){
+  if(!img || !p || !p.src) return;
+  img.style.transform = `translate(${p.x}%, ${p.y}%) scale(${p.zoom})`;
+}
+
+function setPhoto(containerId, photo, caption, label, capClass){
+  const c = document.getElementById(containerId);
+  c.innerHTML = "";
+  if(photo && photo.src){
+    const img = document.createElement("img");
+    img.src = photo.src;
+    c.appendChild(img);
+    applyCrop(img, photo);
+    c.classList.add("has-image");
+    if(caption){
+      const cap = document.createElement("div");
+      cap.className = capClass || "hero-cap";
+      cap.textContent = caption;
+      c.appendChild(cap);
+    }
+    if(label && capClass === "gal-cap"){
+      const n = document.createElement("div");
+      n.className = "gal-num";
+      n.textContent = label;
+      c.appendChild(n);
+    }
+  } else {
+    c.classList.remove("has-image");
+    const empty = document.createElement("div");
+    empty.className = "rep-photo-empty";
+    empty.innerHTML = label || "PHOTO";
+    c.appendChild(empty);
+  }
+}
+
+// ===== Interactive crop: drag to pan, wheel to zoom, dblclick to reset =====
+function makeCroppable(container, getPhoto, getImg){
+  let dragging = false;
+  let startClientX = 0, startClientY = 0;
+  let startX = 0, startY = 0;
+
+  container.addEventListener("pointerdown", e=>{
+    const p = getPhoto();
+    if(!p.src) return;
+    dragging = true;
+    container.setPointerCapture(e.pointerId);
+    container.classList.add("dragging");
+    startClientX = e.clientX;
+    startClientY = e.clientY;
+    startX = p.x;
+    startY = p.y;
+    e.preventDefault();
+  });
+  container.addEventListener("pointermove", e=>{
+    if(!dragging) return;
+    const p = getPhoto();
+    const rect = container.getBoundingClientRect();
+    if(!rect.width || !rect.height) return;
+    const dxPct = (e.clientX - startClientX) / rect.width * 100;
+    const dyPct = (e.clientY - startClientY) / rect.height * 100;
+    p.x = startX + dxPct;
+    p.y = startY + dyPct;
+    const img = getImg();
+    applyCrop(img, p);
+  });
+  const endDrag = ()=>{
+    if(dragging){
+      dragging = false;
+      container.classList.remove("dragging");
+      save();
+    }
+  };
+  container.addEventListener("pointerup", endDrag);
+  container.addEventListener("pointercancel", endDrag);
+
+  container.addEventListener("wheel", e=>{
+    const p = getPhoto();
+    if(!p.src) return;
+    e.preventDefault();
+    const step = e.deltaY < 0 ? 0.06 : -0.06;
+    p.zoom = Math.max(1, Math.min(3, +(p.zoom + step).toFixed(3)));
+    applyCrop(getImg(), p);
+    save();
+  }, {passive:false});
+
+  container.addEventListener("dblclick", e=>{
+    const p = getPhoto();
+    if(!p.src) return;
+    p.x = 0; p.y = 0; p.zoom = 1;
+    applyCrop(getImg(), p);
+    save();
+  });
+}
+
+function render(){
+  const from = val("f-stayFrom"), to = val("f-stayTo");
+  let stay = "ご利用期間を入力してください";
+  if(from && to) stay = `${fmtDate(from)} 〜 ${fmtDate(to)}`;
+  else if(from) stay = `${fmtDate(from)} 〜`;
+  document.getElementById("p-stay").textContent = stay;
+  document.getElementById("p-days").textContent = calcDays(from,to);
+
+  // Cover background
+  const coverArea = document.getElementById("p-cover");
+  const coverImg = coverArea.querySelector(".cover-img-layer img");
+  if(state.cover.src){
+    coverArea.classList.add("has-bg");
+    coverImg.src = state.cover.src;
+    applyCrop(coverImg, state.cover);
+  } else {
+    coverArea.classList.remove("has-bg");
+    coverImg.src = "";
+  }
+
+  setPhoto("p-hero-main", state.photos[0], state.captions[0], "MAIN PHOTOGRAPH", "hero-cap");
+  setPhoto("p-hero-1", state.photos[1], state.captions[1], "N° 02", "hero-cap");
+  setPhoto("p-hero-2", state.photos[2], state.captions[2], "N° 03", "hero-cap");
+  setPhoto("p-gal-3", state.photos[3], state.captions[3], "N° 04", "gal-cap");
+  setPhoto("p-gal-4", state.photos[4], state.captions[4], "N° 05", "gal-cap");
+  setPhoto("p-gal-5", state.photos[5], state.captions[5], "N° 06", "gal-cap");
+
+  const narr = val("f-narrative");
+  document.getElementById("p-narrative").textContent = narr || "滞在中の活動内容がここに表示されます。左のフォームに入力してください。";
+
+  save();
+}
+
+function save(){
+  const data = { fields:{}, cover: state.cover, photos: state.photos, captions: state.captions };
+  Object.entries(fields).forEach(([k,id])=>{ data.fields[k] = val(id); });
+  try { localStorage.setItem("keepsake-report", JSON.stringify(data)); } catch(e){}
+}
+
+function normalizePhoto(v){
+  if(!v) return newPhoto();
+  if(typeof v === "string") return {src:v, x:0, y:0, zoom:1}; // migrate legacy
+  return {
+    src: v.src || null,
+    x: typeof v.x === "number" ? v.x : 0,
+    y: typeof v.y === "number" ? v.y : 0,
+    zoom: typeof v.zoom === "number" ? v.zoom : 1
+  };
+}
+function load(){
+  try {
+    const raw = localStorage.getItem("keepsake-report");
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    Object.entries(fields).forEach(([k,id])=>{
+      const el = document.getElementById(id);
+      if(el && data.fields && data.fields[k]!==undefined) el.value = data.fields[k];
+    });
+    state.cover = normalizePhoto(data.cover);
+    if(Array.isArray(data.photos)){
+      for(let i=0;i<PHOTO_COUNT;i++) state.photos[i] = normalizePhoto(data.photos[i]);
+    }
+    if(Array.isArray(data.captions)){
+      for(let i=0;i<PHOTO_COUNT;i++) state.captions[i] = data.captions[i] || "";
+    }
+    // restore editor thumbnails
+    state.photos.forEach((p,i)=>{
+      if(p.src){
+        const slot = document.querySelector(`.photo-slot[data-slot="${i}"]`);
+        const img = document.createElement("img");
+        img.src = p.src;
+        slot.appendChild(img);
+        slot.classList.add("has-image");
+      }
+    });
+    if(state.cover.src){
+      const up = document.getElementById("cover-upload");
+      const img = document.createElement("img");
+      img.src = state.cover.src;
+      up.appendChild(img);
+      up.classList.add("has-image");
+    }
+    state.captions.forEach((c,i)=>{
+      const el = document.querySelector(`.photo-caption[data-cap="${i}"]`);
+      if(el) el.value = c;
+    });
+  } catch(e){}
+}
+
+let zoom = 1;
+function applyZoom(){
+  const paper = document.getElementById("paper");
+  const wrap = document.querySelector(".paper-scaler");
+  paper.style.transform = `scale(${zoom})`;
+  document.getElementById("zoom-label").textContent = Math.round(zoom*100) + "%";
+  wrap.style.height = `calc(297mm * ${zoom} + 20px)`;
+}
+function autoZoom(){
+  const wrap = document.querySelector(".preview-wrap");
+  const availW = wrap.clientWidth - 80;
+  const paperW = 210 * 3.7795;
+  zoom = Math.min(1, availW / paperW);
+  applyZoom();
+}
+document.getElementById("zoom-in").addEventListener("click",()=>{ zoom = Math.min(1.4, zoom+0.1); applyZoom(); });
+document.getElementById("zoom-out").addEventListener("click",()=>{ zoom = Math.max(0.4, zoom-0.1); applyZoom(); });
+window.addEventListener("resize", autoZoom);
+
+document.getElementById("btn-print").addEventListener("click",()=>{
+  const saved = zoom; zoom = 1; applyZoom();
+  setTimeout(()=>{ window.print(); zoom = saved; applyZoom(); }, 100);
+});
+document.getElementById("btn-reset").addEventListener("click",()=>{
+  if(!confirm("入力内容をすべてクリアしますか？")) return;
+  localStorage.removeItem("keepsake-report");
+  location.reload();
+});
+document.getElementById("btn-sample").addEventListener("click",()=>{
+  const sample = {
+    stayFrom:"2026-04-10",
+    stayTo:"2026-04-17",
+    narrative:"桜の花びらがやわらかく舞い散る季節、一週間のご滞在を賜りました。初日は少し緊張したご様子でいらっしゃいましたが、同室の方と穏やかにお話しされるうち、すっかり打ち解けられたご様子でした。中日の園芸クラブでは、ご自身で選ばれたパンジーの苗を丁寧に植えてくださり、「土の匂いが懐かしい」と笑顔でおっしゃっていたのが印象的です。最終日の合唱の時間には、昔から大好きだという「故郷」を、目を閉じて口ずさんでくださいました。"
+  };
+  Object.entries(sample).forEach(([k,v])=>{
+    const el = document.getElementById(fields[k]);
+    if(el) el.value = v;
+  });
+  render();
+});
+
+load();
+render();
+autoZoom();
+
+// Attach croppable behavior to cover + 6 preview photos
+(function initCroppables(){
+  const coverArea = document.getElementById("p-cover");
+  makeCroppable(
+    coverArea,
+    ()=> state.cover,
+    ()=> coverArea.querySelector(".cover-img-layer img")
+  );
+  PREVIEW_CONTAINERS.forEach((id, idx)=>{
+    const el = document.getElementById(id);
+    makeCroppable(
+      el,
+      ()=> state.photos[idx],
+      ()=> el.querySelector("img")
+    );
+  });
+})();
+</script>
+</body>
+</html>
